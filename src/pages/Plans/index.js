@@ -1,15 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { MdAdd } from 'react-icons/md';
+import api from '~/services/api';
 
 import { Table } from '~/components/Table/styles';
-import { Title } from '~/components/Title/styles';
+import { Title, Button } from '~/components/Title/styles';
 
 export default function Plans() {
+  const [plans, setPlans] = useState([]);
+
+  useEffect(() => {
+    async function loadPlans() {
+      const response = await api.get('/plans');
+
+      setPlans(response.data);
+    }
+
+    loadPlans();
+  }, [plans]);
+
   return (
     <>
       <Title maxWidth="900px">
         <h1>Gerenciando planos</h1>
-        <button type="submit">CADASTRAR</button>
+        <Button type="submit" color="#EE4D64">
+          <div>
+            <MdAdd size={20} color="#FFF" />
+          </div>
+
+          <span>CADASTRAR</span>
+        </Button>
       </Title>
       <Table maxWidth="900px">
         <thead>
@@ -21,21 +41,23 @@ export default function Plans() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <span>Start</span>
-            </td>
-            <td>
-              <span>1 mês</span>
-            </td>
-            <td>
-              <span>R$129,00</span>
-            </td>
-            <td>
-              <Link to="/">editar</Link>
-              <Link to="/">apagar</Link>
-            </td>
-          </tr>
+          {plans.map(plan => (
+            <tr key={plan.id}>
+              <td>
+                <span>{plan.title}</span>
+              </td>
+              <td>
+                <span>{plan.duration} mês</span>
+              </td>
+              <td>
+                <span>{plan.price}</span>
+              </td>
+              <td>
+                <Link to="/">editar</Link>
+                <Link to="/">apagar</Link>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </>

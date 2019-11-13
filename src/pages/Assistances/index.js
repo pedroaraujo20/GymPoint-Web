@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import api from '~/services/api';
 import { Table } from '~/components/Table/styles';
 import { Title } from '~/components/Title/styles';
 
 export default function Assistances() {
+  const [assists, setAssists] = useState([]);
+
+  useEffect(() => {
+    async function loadAssists() {
+      const response = await api.get('/assists');
+
+      setAssists(response.data);
+    }
+
+    loadAssists();
+  }, [assists]);
   return (
     <>
       <Title maxWidth="700px">
@@ -19,14 +31,16 @@ export default function Assistances() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <span>Pedro Araujo</span>
-            </td>
-            <td>
-              <Link to="/">responder</Link>
-            </td>
-          </tr>
+          {assists.map(assist => (
+            <tr key={assist._id}>
+              <td>
+                <span>{assist.student_id}</span>
+              </td>
+              <td>
+                <Link to="/">responder</Link>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </>

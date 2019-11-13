@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import { MdAdd } from 'react-icons/md';
+import api from '~/services/api';
 import { Table } from '~/components/Table/styles';
 import { Title, Button } from '~/components/Title/styles';
 
 export default function Registrations() {
+  const [regists, setRegists] = useState([]);
+
+  useEffect(() => {
+    async function loadRegistrations() {
+      const response = await api.get('/registrations');
+
+      setRegists(response.data);
+    }
+
+    loadRegistrations();
+  }, [regists]);
   return (
     <>
       <Title maxWidth="1380px">
         <h1>Gerenciando planos</h1>
         <Button type="submit" color="#EE4D64">
-          CADASTRAR
+          <div>
+            <MdAdd size={20} color="#FFF" />
+          </div>
+
+          <span>CADASTRAR</span>
         </Button>
       </Title>
       <Table maxWidth="1380px">
@@ -25,27 +42,29 @@ export default function Registrations() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <span>Pedro Araujo</span>
-            </td>
-            <td>
-              <span>Diamond</span>
-            </td>
-            <td>
-              <span>30 de Abril de 2019</span>
-            </td>
-            <td>
-              <span>30 de Maio de 2019</span>
-            </td>
-            <td>
-              <span>Não</span>
-            </td>
-            <td>
-              <Link to="/">editar</Link>
-              <Link to="/">apagar</Link>
-            </td>
-          </tr>
+          {regists.map(reg => (
+            <tr key={reg.id}>
+              <td>
+                <span>{reg.student.name}</span>
+              </td>
+              <td>
+                <span>{reg.plan.title}</span>
+              </td>
+              <td>
+                <span>{reg.start_date}</span>
+              </td>
+              <td>
+                <span>{reg.end_date}</span>
+              </td>
+              <td>
+                <span>{reg.active}</span>
+              </td>
+              <td>
+                <Link to="/">editar</Link>
+                <Link to="/">apagar</Link>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </>

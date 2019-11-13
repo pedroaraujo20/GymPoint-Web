@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
+import { MdSearch } from 'react-icons/md';
 
 export const Title = styled.header`
   display: flex;
@@ -10,21 +11,29 @@ export const Title = styled.header`
   margin-bottom: 24px;
   margin-top: 34px;
 
+  h1 {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+    color: #444444;
+  }
+
   div {
     display: flex;
-    width: 100%;
-    max-width: 395px;
 
     input {
-      height: 36px;
-      max-width: 237px;
+      width: 237px;
       margin-left: 16px;
-      background: #ffffff;
-      border: 1px solid #dddddd;
       border-radius: 4px;
-      font-size: 14px;
-      line-height: 16px;
-      color: #999999;
+      background: #fff;
+      border: 1px solid #dddddd;
+      padding: 0 30px 0 12px;
+
+      &::placeholder {
+        font-size: 14px;
+        line-height: 16px;
+        color: #999999;
+      }
     }
   }
 `;
@@ -32,17 +41,21 @@ export const Title = styled.header`
 export const Button = styled.button`
   background: ${props => props.color};
   height: 36px;
+  width: 142px;
   border: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 8px;
-  color: #fff;
+  justify-content: space-between;
+  padding: 0px 15px;
   border-radius: 4px;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 16px;
   transition: background 0.2s;
+
+  span {
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+  }
 
   &:hover {
     background: ${props => darken(0.1, props.color)};
