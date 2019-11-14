@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import api from '~/services/api';
+import history from '~/services/history';
 
 import { Table } from '~/components/Table/styles';
 import { Title, Button } from '~/components/Title/styles';
@@ -17,14 +18,18 @@ export default function Students() {
     }
 
     loadStudents();
-  }, [students]);
+  }, []); // eslint-disable-line
 
   return (
     <>
       <Title maxWidth="1200px">
         <h1>Gerenciando alunos</h1>
         <div>
-          <Button type="submit" color="#EE4D64">
+          <Button
+            type="button"
+            color="#EE4D64"
+            onClick={() => history.push('/students/add')}
+          >
             <div>
               <MdAdd size={20} color="#FFF" />
             </div>

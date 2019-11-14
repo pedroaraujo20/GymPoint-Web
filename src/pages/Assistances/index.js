@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
 import api from '~/services/api';
 import { Table } from '~/components/Table/styles';
 import { Title } from '~/components/Title/styles';
@@ -16,7 +15,7 @@ export default function Assistances() {
     }
 
     loadAssists();
-  }, [assists]);
+  }, []); // eslint-disable-line
   return (
     <>
       <Title maxWidth="700px">

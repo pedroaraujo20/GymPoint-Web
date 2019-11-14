@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import api from '~/services/api';
+import { formatPrice } from '~/util/format';
 
 import { Table } from '~/components/Table/styles';
 import { Title, Button } from '~/components/Title/styles';
@@ -13,11 +14,16 @@ export default function Plans() {
     async function loadPlans() {
       const response = await api.get('/plans');
 
-      setPlans(response.data);
+      const data = response.data.map(plan => ({
+        ...plan,
+        priceFormatted: formatPrice(plan.price),
+      }));
+
+      setPlans(data);
     }
 
     loadPlans();
-  }, [plans]);
+  }, []); // eslint-disable-line
 
   return (
     <>
@@ -50,7 +56,7 @@ export default function Plans() {
                 <span>{plan.duration} mês</span>
               </td>
               <td>
-                <span>{plan.price}</span>
+                <span>{plan.priceFormatted}</span>
               </td>
               <td>
                 <Link to="/">editar</Link>

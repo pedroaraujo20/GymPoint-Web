@@ -17,7 +17,7 @@ export default function Registrations() {
     }
 
     loadRegistrations();
-  }, [regists]);
+  }, []); // eslint-disable-line
   return (
     <>
       <Title maxWidth="1380px">
