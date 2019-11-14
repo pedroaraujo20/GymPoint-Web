@@ -1,27 +1,38 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
 import { Form, Input } from '@rocketseat/unform';
+import history from '~/services/history';
+
+import { addStudentRequest } from '~/store/modules/student/actions';
+
 import { Title, Button } from '~/components/Title/styles';
 import { Form as FormStyled } from '~/components/Form/styles';
 
-export default function addStudent() {
+export default function AddStudent() {
+  const dispatch = useDispatch();
+
   function handleSubmit(data) {
-    console.tron.log(data);
+    dispatch(addStudentRequest(data));
   }
 
   return (
     <>
       <Title maxWidth="900px">
-        <h1>Edição de aluno</h1>
+        <h1>Cadastro de aluno</h1>
         <div>
-          <Button type="submit" color="#DDDDDD">
+          <Button
+            onClick={() => history.push('/students')}
+            type="button"
+            color="#DDDDDD"
+          >
             <div>
               <MdKeyboardArrowLeft size={20} color="#FFF" />
             </div>
 
             <span>VOLTAR</span>
           </Button>
-          <Button type="button" color="#EE4D64">
+          <Button type="submit" form="student-form" color="#EE4D64">
             <div>
               <MdDone size={20} color="#FFF" />
             </div>
@@ -31,7 +42,7 @@ export default function addStudent() {
         </div>
       </Title>
       <FormStyled maxWidth="900px">
-        <Form onSubmit={handleSubmit}>
+        <Form id="student-form" onSubmit={handleSubmit}>
           <label htmlFor="name">NOME COMPLETO</label>
           <Input name="name" placeholder="John Doe" />
 
@@ -50,7 +61,7 @@ export default function addStudent() {
             </div>
 
             <div>
-              <label htmlFor="height">ALTURA (em cm)</label>
+              <label htmlFor="height">ALTURA</label>
               <Input name="height" />
             </div>
           </div>

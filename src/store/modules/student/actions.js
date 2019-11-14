@@ -1,8 +1,19 @@
-import api from '~/services/api';
-
-export function loadStudents() {
+export function addStudentRequest(data) {
   return {
-    type: '@students/LIST_STUDENTS',
-    payload: api.get('/students'),
+    type: '@student/ADD_STUDENT_REQUEST',
+    payload: { data },
+  };
+}
+
+export function addStudentSuccess(student) {
+  return {
+    type: '@student/ADD_STUDENT_SUCCESS',
+    payload: { student },
+  };
+}
+
+export function addStudentFailure() {
+  return {
+    type: '@student/ADD_STUDENT_FAILURE',
   };
 }

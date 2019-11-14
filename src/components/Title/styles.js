@@ -38,6 +38,36 @@ export const Title = styled.header`
   }
 `;
 
+export const SubmitButton = styled.label`
+  background: ${props => props.color};
+  height: 36px;
+  width: 100%;
+  max-width: 142px;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 15px;
+  border-radius: 4px;
+  margin-left: 16px;
+  transition: background 0.2s;
+
+  div {
+    margin-right: 5px;
+  }
+
+  span {
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  &:hover {
+    background: ${props => darken(0.1, props.color)};
+  }
+`;
+
 export const Button = styled.button`
   background: ${props => props.color};
   height: 36px;
