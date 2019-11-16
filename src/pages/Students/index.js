@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import api from '~/services/api';
@@ -7,8 +8,15 @@ import history from '~/services/history';
 import { Table } from '~/components/Table/styles';
 import { Title, Button } from '~/components/Title/styles';
 
+import { getStudentRequest } from '~/store/modules/student/actions';
+
 export default function Students() {
+  const dispatch = useDispatch();
   const [students, setStudents] = useState([]);
+
+  function handleGetStudent(id) {
+    dispatch(getStudentRequest(id));
+  }
 
   useEffect(() => {
     async function loadStudents() {
@@ -61,7 +69,12 @@ export default function Students() {
                 <span>{student.age}</span>
               </td>
               <td>
-                <Link to="/">editar</Link>
+                <Link
+                  onClick={() => handleGetStudent(student.id)}
+                  to={`/students/edit/${student.id}`}
+                >
+                  editar
+                </Link>
                 <Link to="/">apagar</Link>
               </td>
             </tr>

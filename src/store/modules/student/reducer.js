@@ -11,6 +11,14 @@ export default function student(state = INITIAL_STATE, action) {
         draft.student = action.payload.student;
         break;
       }
+      case '@student/GET_STUDENT_SUCCESS': {
+        draft.student = action.payload.student;
+        break;
+      }
+      case '@student/UPDATE_STUDENT_SUCCESS': {
+        draft.student = action.payload.student;
+        break;
+      }
       default:
     }
   });
