@@ -10,6 +10,8 @@ import {
   getStudentFailure,
   updateStudentSuccess,
   updateStudentFailure,
+  deleteStudentSuccess,
+  deleteStudentFailure,
 } from './actions';
 
 export function* getStudent({ payload }) {
@@ -55,8 +57,24 @@ export function* updateStudent({ payload }) {
   }
 }
 
+export function* deleteStudent({ payload }) {
+  try {
+    yield call(api.delete, `students/${payload.id}`);
+
+    toast.success('Estudante deletado com sucesso!');
+
+    yield put(deleteStudentSuccess());
+    history.push('/students');
+  } catch (err) {
+    console.tron.log(err);
+    toast.error('Erro ao apagar estudante!');
+    yield put(deleteStudentFailure());
+  }
+}
+
 export default all([
   takeLatest('@student/ADD_STUDENT_REQUEST', addStudent),
   takeLatest('@student/GET_STUDENT_REQUEST', getStudent),
   takeLatest('@student/UPDATE_STUDENT_REQUEST', updateStudent),
+  takeLatest('@student/DELETE_STUDENT_REQUEST', deleteStudent),
 ]);

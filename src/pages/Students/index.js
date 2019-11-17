@@ -8,7 +8,10 @@ import history from '~/services/history';
 import { Table } from '~/components/Table/styles';
 import { Title, Button } from '~/components/Title/styles';
 
-import { getStudentRequest } from '~/store/modules/student/actions';
+import {
+  getStudentRequest,
+  deleteStudentRequest,
+} from '~/store/modules/student/actions';
 
 export default function Students() {
   const dispatch = useDispatch();
@@ -16,6 +19,11 @@ export default function Students() {
 
   function handleGetStudent(id) {
     dispatch(getStudentRequest(id));
+  }
+
+  function handleDeleteStudent(id) {
+    dispatch(deleteStudentRequest(id));
+    history.push('/students');
   }
 
   useEffect(() => {
@@ -75,7 +83,9 @@ export default function Students() {
                 >
                   editar
                 </Link>
-                <Link to="/">apagar</Link>
+                <Link onClick={() => handleDeleteStudent(student.id)}>
+                  apagar
+                </Link>
               </td>
             </tr>
           ))}
