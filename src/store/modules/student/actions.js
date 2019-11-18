@@ -1,3 +1,23 @@
+export function studentListRequest(param) {
+  return {
+    type: '@student/STUDENT_LIST_REQUEST',
+    payload: { param },
+  };
+}
+
+export function studentListSuccess(list) {
+  return {
+    type: '@student/STUDENT_LIST_SUCCESS',
+    payload: { list },
+  };
+}
+
+export function studentListFailure() {
+  return {
+    type: '@student/STUDENT_LIST_FAILURE',
+  };
+}
+
 export function getStudentRequest(id) {
   return {
     type: '@student/GET_STUDENT_REQUEST',

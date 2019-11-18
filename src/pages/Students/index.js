@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import api from '~/services/api';
@@ -11,11 +11,13 @@ import { Title, Button } from '~/components/Title/styles';
 import {
   getStudentRequest,
   deleteStudentRequest,
+  studentListRequest,
 } from '~/store/modules/student/actions';
 
 export default function Students() {
-  const dispatch = useDispatch();
-  const [students, setStudents] = useState([]);
+  const students = useSelector(state => state.student.studentList);
+  const dispatch = useDispatch();/* 
+  const [students, setStudents] = useState([]); */
 
   function handleGetStudent(id) {
     dispatch(getStudentRequest(id));
@@ -28,13 +30,12 @@ export default function Students() {
 
   useEffect(() => {
     async function loadStudents() {
-      const response = await api.get('/students');
-
-      setStudents(response.data);
+      await dispatch(studentListRequest());
     }
 
     loadStudents();
-  }, []); // eslint-disable-line
+  }, [dispatch]); 
+
 
   return (
     <>

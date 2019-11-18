@@ -4,6 +4,8 @@ import api from '~/services/api';
 import history from '~/services/history';
 
 import {
+  studentListSuccess,
+  studentListFailure,
   addStudentSuccess,
   addStudentFailure,
   getStudentSuccess,
@@ -13,6 +15,17 @@ import {
   deleteStudentSuccess,
   deleteStudentFailure,
 } from './actions';
+
+export function* listStudents() {
+  try {
+    const response = yield call(api.get, 'students');
+
+    yield put(studentListSuccess(response.data));
+  } catch (err) {
+    toast.error('Ocorreu um erro, tente novamente mais tarde.');
+    yield put(studentListFailure());
+  }
+}
 
 export function* getStudent({ payload }) {
   try {
@@ -63,8 +76,8 @@ export function* deleteStudent({ payload }) {
 
     toast.success('Estudante deletado com sucesso!');
 
-    yield put(deleteStudentSuccess());
     history.push('/students');
+    yield put(deleteStudentSuccess());
   } catch (err) {
     console.tron.log(err);
     toast.error('Erro ao apagar estudante!');
@@ -73,6 +86,7 @@ export function* deleteStudent({ payload }) {
 }
 
 export default all([
+  takeLatest('@student/STUDENT_LIST_REQUEST', listStudents),
   takeLatest('@student/ADD_STUDENT_REQUEST', addStudent),
   takeLatest('@student/GET_STUDENT_REQUEST', getStudent),
   takeLatest('@student/UPDATE_STUDENT_REQUEST', updateStudent),
