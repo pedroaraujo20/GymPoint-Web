@@ -74,10 +74,12 @@ export function* deleteStudent({ payload }) {
   try {
     yield call(api.delete, `students/${payload.id}`);
 
+    const response = yield call(api.get, 'students');
+
     toast.success('Estudante deletado com sucesso!');
 
     history.push('/students');
-    yield put(deleteStudentSuccess());
+    yield put(deleteStudentSuccess(response.data));
   } catch (err) {
     console.tron.log(err);
     toast.error('Erro ao apagar estudante!');

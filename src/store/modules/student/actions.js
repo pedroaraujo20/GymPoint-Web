@@ -85,9 +85,10 @@ export function deleteStudentRequest(id) {
   };
 }
 
-export function deleteStudentSuccess() {
+export function deleteStudentSuccess(student) {
   return {
     type: '@student/DELETE_STUDENT_SUCCESS',
+    payload: { student },
   };
 }
 

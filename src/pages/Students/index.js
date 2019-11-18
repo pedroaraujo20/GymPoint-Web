@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
-import api from '~/services/api';
 import history from '~/services/history';
 
 import { Table } from '~/components/Table/styles';
@@ -16,8 +15,7 @@ import {
 
 export default function Students() {
   const students = useSelector(state => state.student.studentList);
-  const dispatch = useDispatch();/* 
-  const [students, setStudents] = useState([]); */
+  const dispatch = useDispatch();
 
   function handleGetStudent(id) {
     dispatch(getStudentRequest(id));
@@ -25,7 +23,6 @@ export default function Students() {
 
   function handleDeleteStudent(id) {
     dispatch(deleteStudentRequest(id));
-    history.push('/students');
   }
 
   useEffect(() => {
@@ -34,8 +31,7 @@ export default function Students() {
     }
 
     loadStudents();
-  }, [dispatch]); 
-
+  }, [dispatch]);
 
   return (
     <>
