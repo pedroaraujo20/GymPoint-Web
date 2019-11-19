@@ -3,11 +3,28 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
 import { Form, Input } from '@rocketseat/unform';
+import * as Yup from 'yup';
 import api from '~/services/api';
 import history from '~/services/history';
 
 import { Title, Button } from '~/components/Title/styles';
 import { Form as FormStyled } from '~/components/Form/styles';
+
+const schema = Yup.object().shape({
+  name: Yup.string().required('O nome é obrigatório'),
+  email: Yup.string()
+    .email('Informe um e-mail válido')
+    .required('O e-mail é obrigatório'),
+  age: Yup.number()
+    .positive('Idade inválida')
+    .required('A idade é obrigatória'),
+  weight: Yup.number()
+    .positive('Peso inválido')
+    .required('O peso é obrigatório'),
+  height: Yup.number()
+    .positive('Altura inválida')
+    .required('A altura é obrigatória'),
+});
 
 export default function EditStudent() {
   const [student, setStudent] = useState([]);
@@ -62,7 +79,12 @@ export default function EditStudent() {
         </div>
       </Title>
       <FormStyled maxWidth="900px">
-        <Form initialData={student} id="student-form" onSubmit={handleSubmit}>
+        <Form
+          initialData={student}
+          id="student-form"
+          onSubmit={handleSubmit}
+          schema={schema}
+        >
           <label htmlFor="name">NOME COMPLETO</label>
           <Input name="name" placeholder="John Doe" />
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { MdAdd } from 'react-icons/md';
 import api from '~/services/api';
+import history from '~/services/history';
 import { formatPrice } from '~/util/format';
 
 import { Table } from '~/components/Table/styles';
@@ -10,8 +11,8 @@ import { Title, Button } from '~/components/Title/styles';
 export default function Plans() {
   const [plans, setPlans] = useState([]);
 
-  useEffect(() => {
-    async function loadPlans() {
+  async function loadPlans() {
+    try {
       const response = await api.get('/plans');
 
       const data = response.data.map(plan => ({
@@ -20,8 +21,12 @@ export default function Plans() {
       }));
 
       setPlans(data);
+    } catch (err) {
+      toast.error(err);
     }
+  }
 
+  useEffect(() => {
     loadPlans();
   }, []); // eslint-disable-line
 
@@ -29,7 +34,11 @@ export default function Plans() {
     <>
       <Title maxWidth="900px">
         <h1>Gerenciando planos</h1>
-        <Button type="submit" color="#EE4D64">
+        <Button
+          onClick={() => history.push('/plans/add')}
+          type="button"
+          color="#EE4D64"
+        >
           <div>
             <MdAdd size={20} color="#FFF" />
           </div>
@@ -59,8 +68,8 @@ export default function Plans() {
                 <span>{plan.priceFormatted}</span>
               </td>
               <td>
-                <Link to="/">editar</Link>
-                <Link to="/">apagar</Link>
+                <button type="button">editar</button>
+                <button type="button">apagar</button>
               </td>
             </tr>
           ))}

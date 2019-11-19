@@ -7,6 +7,15 @@ export const Form = styled.div`
   width: 100%;
   max-width: ${props => props.maxWidth};
 
+  span {
+    display: block;
+    color: #ee4d64;
+    align-self: flex-start;
+    font-weight: bold;
+    margin-top: -15px;
+    margin-bottom: 20px;
+  }
+
   label {
     font-weight: bold;
     font-size: 14px;

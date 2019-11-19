@@ -8,6 +8,7 @@ import Students from '../pages/Students';
 import AddStudent from '../pages/addStudent';
 import EditStudent from '../pages/editStudent';
 import Plans from '../pages/Plans';
+import AddPlan from '../pages/addPlan';
 import Registrations from '../pages/Registrations';
 import Assistances from '../pages/Assistances';
 
@@ -18,7 +19,8 @@ export default function Routes() {
       <Route path="/students" exact component={Students} isPrivate />
       <Route path="/students/add" component={AddStudent} isPrivate />
       <Route path="/students/edit/:id" component={EditStudent} isPrivate />
-      <Route path="/plans" component={Plans} isPrivate />
+      <Route path="/plans" exact component={Plans} isPrivate />
+      <Route path="/plans/add" component={AddPlan} isPrivate />
       <Route path="/registrations" component={Registrations} isPrivate />
       <Route path="/assistances" component={Assistances} isPrivate />
       <Route path="/" component={() => <h1>404 Page not Found</h1>} />
