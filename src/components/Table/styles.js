@@ -39,10 +39,12 @@ export const Table = styled.table`
       color: #666;
     }
 
-    a {
+    button {
       padding-left: 23px;
       color: #de3b3b;
       font-size: 15px;
+      background: none;
+      border: 0;
       line-height: 18px;
 
       &:hover {

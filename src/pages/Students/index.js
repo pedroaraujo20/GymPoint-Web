@@ -1,37 +1,46 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { MdAdd } from 'react-icons/md';
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+
+import { MdAdd, MdSearch } from 'react-icons/md';
+
+import api from '~/services/api';
 import history from '~/services/history';
 
 import { Table } from '~/components/Table/styles';
 import { Title, Button } from '~/components/Title/styles';
 
-import {
-  getStudentRequest,
-  deleteStudentRequest,
-  studentListRequest,
-} from '~/store/modules/student/actions';
-
 export default function Students() {
-  const students = useSelector(state => state.student.studentList);
-  const dispatch = useDispatch();
+  const [students, setStudents] = useState([]);
 
-  function handleGetStudent(id) {
-    dispatch(getStudentRequest(id));
-  }
+  async function loadStudents() {
+    try {
+      const response = await api.get('students');
 
-  function handleDeleteStudent(id) {
-    dispatch(deleteStudentRequest(id));
+      setStudents(response.data);
+    } catch (err) {
+      const { error } = err.response.data;
+      toast.error(error);
+    }
   }
 
   useEffect(() => {
-    async function loadStudents() {
-      await dispatch(studentListRequest());
-    }
-
     loadStudents();
-  }, [dispatch]);
+  }, []);
+
+  async function handleDeleteStudent(id) {
+    try {
+      await api.delete(`students/${id}`);
+
+      const newStudentList = students.filter(student => student.id !== id);
+
+      toast.success('Estudante excluído com sucesso!');
+
+      setStudents(newStudentList);
+    } catch (err) {
+      const { error } = err.response.data;
+      toast.error(error);
+    }
+  }
 
   return (
     <>
@@ -74,15 +83,18 @@ export default function Students() {
                 <span>{student.age}</span>
               </td>
               <td>
-                <Link
-                  onClick={() => handleGetStudent(student.id)}
-                  to={`/students/edit/${student.id}`}
+                <button
+                  type="button"
+                  onClick={() => history.push(`/students/edit/${student.id}`)}
                 >
                   editar
-                </Link>
-                <Link onClick={() => handleDeleteStudent(student.id)}>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteStudent(student.id)}
+                >
                   apagar
-                </Link>
+                </button>
               </td>
             </tr>
           ))}

@@ -1,19 +1,22 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
 import { Form, Input } from '@rocketseat/unform';
+import api from '~/services/api';
 import history from '~/services/history';
-
-import { addStudentRequest } from '~/store/modules/student/actions';
 
 import { Title, Button } from '~/components/Title/styles';
 import { Form as FormStyled } from '~/components/Form/styles';
 
 export default function AddStudent() {
-  const dispatch = useDispatch();
-
-  function handleSubmit(data) {
-    dispatch(addStudentRequest(data));
+  async function handleSubmit(data) {
+    try {
+      await api.post('students', data);
+      toast.success('Aluno cadastrado com sucesso!');
+      history.push('/students');
+    } catch (err) {
+      toast.error(err);
+    }
   }
 
   return (

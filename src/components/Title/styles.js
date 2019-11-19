@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
-import { MdSearch } from 'react-icons/md';
 
 export const Title = styled.header`
   display: flex;
