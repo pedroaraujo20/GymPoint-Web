@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
 import { Form, Input } from '@rocketseat/unform';
@@ -9,23 +9,23 @@ import history from '~/services/history';
 import { Title, Button } from '~/components/Title/styles';
 import { Form as FormStyled } from '~/components/Form/styles';
 
-/* const schema = Yup.object().shape({
-  name: Yup.string().required('O nome é obrigatório'),
-  email: Yup.string()
-    .email('Informe um e-mail válido')
-    .required('O e-mail é obrigatório'),
-  age: Yup.number()
-    .positive('Idade inválida')
-    .required('A idade é obrigatória'),
-  weight: Yup.number()
-    .positive('Peso inválido')
-    .required('O peso é obrigatório'),
-  height: Yup.number()
-    .positive('Altura inválida')
-    .required('A altura é obrigatória'),
-}); */
+const schema = Yup.object().shape({
+  title: Yup.string().required('O título é obrigatório'),
+  duration: Yup.number()
+    .integer()
+    .positive('Valor negativo')
+    .typeError('Campo obrigatorio')
+    .required('Campo obritatório'),
+  price: Yup.number()
+    .positive('Valor negativo')
+    .typeError('Campo obrigatorio')
+    .required('Campo obrigatório'),
+});
 
 export default function AddPlan() {
+  const [price, setPrice] = useState('');
+  const [duration, setDuration] = useState('');
+
   async function handleSubmit(data) {
     try {
       await api.post('plans', data);
@@ -36,10 +36,12 @@ export default function AddPlan() {
     }
   }
 
+  const total = useMemo(() => price * duration, [price, duration]);
+
   return (
     <>
       <Title maxWidth="900px">
-        <h1>Cadastro de aluno</h1>
+        <h1>Cadastro de plano</h1>
         <div>
           <Button
             onClick={() => history.push('/plans')}
@@ -62,24 +64,32 @@ export default function AddPlan() {
         </div>
       </Title>
       <FormStyled maxWidth="900px">
-        <Form id="plan-form" onSubmit={handleSubmit}>
+        <Form id="plan-form" onSubmit={handleSubmit} schema={schema}>
           <label htmlFor="title">TÍTULO DO PLANO</label>
           <Input name="title" />
 
           <div>
             <div>
               <label htmlFor="duration">DURAÇÃO (em meses)</label>
-              <Input name="duration" />
+              <Input
+                type="number"
+                name="duration"
+                onChange={e => setDuration(e.target.value)}
+              />
             </div>
 
             <div>
-              <label htmlFor="price">PESO (em kg)</label>
-              <Input name="price" />
+              <label htmlFor="price">PREÇO MENSAL</label>
+              <Input name="price" onChange={e => setPrice(e.target.value)} />
             </div>
 
             <div>
               <label htmlFor="total">PREÇO TOTAL</label>
-              <input disabled />
+              <input
+                value={total}
+                disabled
+                style={{ backgroundColor: '#DDDDDD' }}
+              />
             </div>
           </div>
         </Form>

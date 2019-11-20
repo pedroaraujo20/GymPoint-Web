@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
@@ -10,59 +10,57 @@ import history from '~/services/history';
 import { Title, Button } from '~/components/Title/styles';
 import { Form as FormStyled } from '~/components/Form/styles';
 
-const schema = Yup.object().shape({
+/* const schema = Yup.object().shape({
   name: Yup.string().required('O nome é obrigatório'),
   email: Yup.string()
     .email('Informe um e-mail válido')
     .required('O e-mail é obrigatório'),
   age: Yup.number()
     .positive('Idade inválida')
-    .typeError('A idade é obrigatória')
     .required('A idade é obrigatória'),
   weight: Yup.number()
     .positive('Peso inválido')
-    .typeError('O peso é obrigatório')
     .required('O peso é obrigatório'),
   height: Yup.number()
     .positive('Altura inválida')
-    .typeError('A altura é obrigatória')
     .required('A altura é obrigatória'),
-});
+}); */
 
-export default function EditStudent() {
-  const [student, setStudent] = useState([]);
+export default function EditPlan() {
+  const [plan, setPlan] = useState([]);
+
   const { id } = useParams();
 
   useEffect(() => {
-    async function getStudent() {
-      try {
-        const response = await api.get(`students/${id}`);
-        setStudent(response.data);
-      } catch (err) {
-        toast.error(err);
-      }
+    async function loadPlan() {
+      const response = await api.get(`plans/${id}`);
+      setPlan(response.data);
     }
-
-    getStudent();
-  }, []); //eslint-disable-line
+    loadPlan();
+  }, [id]);
 
   async function handleSubmit(data) {
     try {
-      await api.put(`students/${id}`, data);
-      toast.success('Aluno atualizado com sucesso!');
-      history.push('/students');
+      await api.put(`plans/${id}`, data);
+      toast.success('Plano cadastrado com sucesso!');
+      history.push('/plans');
     } catch (err) {
       toast.error(err);
     }
   }
 
+  const total = useMemo(() => plan.price * plan.duration, [
+    plan.price,
+    plan.duration,
+  ]);
+
   return (
     <>
       <Title maxWidth="900px">
-        <h1>Cadastro de aluno</h1>
+        <h1>Edição de plano</h1>
         <div>
           <Button
-            onClick={() => history.push('/students')}
+            onClick={() => history.push('/plans')}
             type="button"
             color="#DDDDDD"
           >
@@ -72,7 +70,7 @@ export default function EditStudent() {
 
             <span>VOLTAR</span>
           </Button>
-          <Button type="submit" form="student-form" color="#EE4D64">
+          <Button type="submit" form="plan-form" color="#EE4D64">
             <div>
               <MdDone size={20} color="#FFF" />
             </div>
@@ -82,32 +80,28 @@ export default function EditStudent() {
         </div>
       </Title>
       <FormStyled maxWidth="900px">
-        <Form
-          initialData={student}
-          id="student-form"
-          onSubmit={handleSubmit}
-          schema={schema}
-        >
-          <label htmlFor="name">NOME COMPLETO</label>
-          <Input name="name" placeholder="John Doe" />
-
-          <label htmlFor="email">ENDEREÇO DE E-MAIL</label>
-          <Input type="email" name="email" placeholder="exemplo@email.com" />
+        <Form initialData={plan} id="plan-form" onSubmit={handleSubmit}>
+          <label htmlFor="title">TÍTULO DO PLANO</label>
+          <Input name="title" />
 
           <div>
             <div>
-              <label htmlFor="age">IDADE</label>
-              <Input name="age" />
+              <label htmlFor="duration">DURAÇÃO (em meses)</label>
+              <Input name="duration" />
             </div>
 
             <div>
-              <label htmlFor="weight">PESO (em kg)</label>
-              <Input name="weight" />
+              <label htmlFor="price">PREÇO MENSAL</label>
+              <Input name="price" />
             </div>
 
             <div>
-              <label htmlFor="height">ALTURA</label>
-              <Input name="height" />
+              <label htmlFor="total">PREÇO TOTAL</label>
+              <input
+                value={total}
+                disabled
+                style={{ backgroundColor: '#DDDDDD' }}
+              />
             </div>
           </div>
         </Form>

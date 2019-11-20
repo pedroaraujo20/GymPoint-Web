@@ -26,9 +26,10 @@ export const Form = styled.div`
   input {
     margin-top: 8px;
     margin-bottom: 20px;
+    display: block;
     width: 100%;
     height: 45px;
-    background: #ffffff;
+    background: #fff;
     border: 1px solid #dddddd;
     border-radius: 4px;
     padding: 13px 15px;
@@ -46,6 +47,7 @@ export const Form = styled.div`
     display: flex;
     margin-bottom: -10px;
     justify-content: space-between;
+    align-items: baseline;
 
     div {
       display: flex;

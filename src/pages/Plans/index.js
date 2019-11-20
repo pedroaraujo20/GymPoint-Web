@@ -30,6 +30,21 @@ export default function Plans() {
     loadPlans();
   }, []); // eslint-disable-line
 
+  async function handleDeletePlan(id) {
+    try {
+      await api.delete(`plans/${id}`);
+
+      const newPlanList = plans.filter(plan => plan.id !== id);
+
+      toast.success('Plano excluído com sucesso!');
+
+      setPlans(newPlanList);
+    } catch (err) {
+      const { error } = err.response.data;
+      toast.error(error);
+    }
+  }
+
   return (
     <>
       <Title maxWidth="900px">
@@ -68,8 +83,15 @@ export default function Plans() {
                 <span>{plan.priceFormatted}</span>
               </td>
               <td>
-                <button type="button">editar</button>
-                <button type="button">apagar</button>
+                <button
+                  onClick={() => history.push(`/plans/edit/${plan.id}`)}
+                  type="button"
+                >
+                  editar
+                </button>
+                <button onClick={() => handleDeletePlan(plan.id)} type="button">
+                  apagar
+                </button>
               </td>
             </tr>
           ))}

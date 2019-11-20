@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import api from '~/services/api';
 import { Table } from '~/components/Table/styles';
 import { Title } from '~/components/Title/styles';
+import Modal from '~/components/Modal';
 
 export default function Assistances() {
   const [assists, setAssists] = useState([]);
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     async function loadAssists() {
@@ -16,6 +17,11 @@ export default function Assistances() {
 
     loadAssists();
   }, []); // eslint-disable-line
+
+  function openModal() {}
+
+  function closeModal() {}
+
   return (
     <>
       <Title maxWidth="700px">
@@ -36,12 +42,29 @@ export default function Assistances() {
                 <span>{assist.student_id}</span>
               </td>
               <td>
-                <Link to="/">responder</Link>
+                <button type="button" onClick={() => setModal(true)}>
+                  responder
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
+      {modal && (
+        <Modal>
+          <span>PERGUNTA DO ALUNO</span>
+          <p>
+            Olá pessoal da academia, gostaria de saber se quando acordar devo
+            ingerir batata doce e frango logo de primeira, preparar as marmitas
+            e lotar a geladeira? Dou um pico de insulina e jogo o hipercalórico?
+          </p>
+          <span>SUA RESPOSTA</span>
+          <textarea />
+          <button onClick={() => setModal(false)} type="button">
+            Responder aluno
+          </button>
+        </Modal>
+      )}
     </>
   );
 }

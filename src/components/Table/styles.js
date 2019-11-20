@@ -9,7 +9,21 @@ export const Table = styled.table`
   max-width: ${props => props.maxWidth};
 
   thead th {
+    padding: 20px 10px;
+    font-size: 16px;
+    color: #444;
     font-weight: bold;
+    padding-bottom: 20px;
+    :first-child {
+      text-align: left;
+    }
+    &:nth-child(n + 2) {
+      text-align: center;
+    }
+    &:nth-child(4) {
+    }
+
+    /* font-weight: bold;
     font-size: 16px;
     line-height: 19px;
     color: #444444;
@@ -19,18 +33,18 @@ export const Table = styled.table`
 
     :first-child {
       padding-left: 0;
-    }
+    } */
   }
 
   tbody td {
-    padding-bottom: 16px;
-    padding-left: 150px;
-    border-bottom: 1px solid #eeeeee;
-    padding-top: 16px;
-
-    :first-child {
-      padding-left: 0;
-      text-align: left;
+    padding: 20px 10px;
+    font-size: 16px;
+    color: #666;
+    border-bottom: 1px solid #eee;
+    &:nth-child(n + 2) {
+      text-align: center;
+    }
+    &:nth-child(4) {
     }
 
     span {
