@@ -3,6 +3,8 @@ import styled from 'styled-components';
 export const Form = styled.div`
   background: #fff;
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
   padding: 30px;
   width: 100%;
   max-width: ${props => props.maxWidth};
@@ -43,13 +45,13 @@ export const Form = styled.div`
     }
   }
 
-  div {
+  div.inputs {
     display: flex;
     margin-bottom: -10px;
     justify-content: space-between;
     align-items: baseline;
 
-    div {
+    div.inputs-labels {
       display: flex;
       flex-direction: column;
     }

@@ -94,18 +94,18 @@ export default function EditStudent() {
           <label htmlFor="email">ENDEREÇO DE E-MAIL</label>
           <Input type="email" name="email" placeholder="exemplo@email.com" />
 
-          <div>
-            <div>
+          <div className="inputs">
+            <div className="inputs-labels">
               <label htmlFor="age">IDADE</label>
               <Input name="age" />
             </div>
 
-            <div>
+            <div className="inputs-labels">
               <label htmlFor="weight">PESO (em kg)</label>
               <Input name="weight" />
             </div>
 
-            <div>
+            <div className="inputs-labels">
               <label htmlFor="height">ALTURA</label>
               <Input name="height" />
             </div>

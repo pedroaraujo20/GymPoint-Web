@@ -68,8 +68,8 @@ export default function AddPlan() {
           <label htmlFor="title">TÍTULO DO PLANO</label>
           <Input name="title" />
 
-          <div>
-            <div>
+          <div className="inputs">
+            <div className="inputs-labels">
               <label htmlFor="duration">DURAÇÃO (em meses)</label>
               <Input
                 type="number"
@@ -78,12 +78,12 @@ export default function AddPlan() {
               />
             </div>
 
-            <div>
+            <div className="inputs-labels">
               <label htmlFor="price">PREÇO MENSAL</label>
               <Input name="price" onChange={e => setPrice(e.target.value)} />
             </div>
 
-            <div>
+            <div className="inputs-labels">
               <label htmlFor="total">PREÇO TOTAL</label>
               <input
                 value={total}

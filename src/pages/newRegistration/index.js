@@ -3,6 +3,8 @@ import { toast } from 'react-toastify';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
+import DatePicker from './DatePicker';
+import ReactSelect from './AsyncSelector';
 import api from '~/services/api';
 import history from '~/services/history';
 
@@ -27,20 +29,32 @@ export default function NewRegistration() {
   const [duration, setDuration] = useState('');
 
   async function handleSubmit(data) {
-    try {
+    console.tron.log(data.student_id);
+    /* try {
       await api.post('registrations', data);
       toast.success('Matrícula realizada com sucesso!');
       history.push('/registrations');
     } catch (err) {
       toast.error(err);
-    }
+    } */
+  }
+
+  const filterColors = (data, inputValue) => {
+    return data.filter(i =>
+      i.name.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
+
+  async function loadStudents(inputValue) {
+    const { data } = await api.get('students');
+    return filterColors(data, inputValue);
   }
 
   const total = useMemo(() => price * duration, [price, duration]);
 
   return (
     <>
-      <Title maxWidth="900px">
+      <Title maxWidth="1000px">
         <h1>Cadastro de matrícula</h1>
         <div>
           <Button
@@ -63,13 +77,13 @@ export default function NewRegistration() {
           </Button>
         </div>
       </Title>
-      <FormStyled maxWidth="900px">
-        <Form id="reg-form" onSubmit={handleSubmit} schema={schema}>
-          <label htmlFor="title">ALUNO</label>
-          <Input name="title" />
+      <FormStyled maxWidth="1000px">
+        <Form id="reg-form" onSubmit={handleSubmit}>
+          <label htmlFor="student">ALUNO</label>
+          <ReactSelect name="student_id" />
 
-          <div>
-            <div>
+          <div className="inputs">
+            <div className="inputs-labels">
               <label htmlFor="duration">PLANO</label>
               <Input
                 type="number"
@@ -78,21 +92,22 @@ export default function NewRegistration() {
               />
             </div>
 
-            <div>
-              <label htmlFor="price">DATA DE INICIO</label>
-              <Input name="price" onChange={e => setPrice(e.target.value)} />
+            <div className="inputs-labels">
+              <label htmlFor="start_date">DATA DE INICIO</label>
+              <DatePicker name="start_date" />
             </div>
 
-            <div>
-              <label htmlFor="total">DATA DE TÉRMINO</label>
+            <div className="inputs-labels">
+              <label htmlFor="end_date">DATA DE TÉRMINO</label>
               <input
                 value={total}
+                type="date"
                 disabled
                 style={{ backgroundColor: '#DDDDDD' }}
               />
             </div>
 
-            <div>
+            <div className="inputs-labels">
               <label htmlFor="total">VALOR FINAL</label>
               <input
                 value={total}

@@ -86,18 +86,18 @@ export default function EditPlan() {
           <label htmlFor="title">TÍTULO DO PLANO</label>
           <Input name="title" />
 
-          <div>
-            <div>
+          <div className="inputs">
+            <div className="inputs-labels">
               <label htmlFor="duration">DURAÇÃO (em meses)</label>
               <Input name="duration" />
             </div>
 
-            <div>
+            <div className="inputs-labels">
               <label htmlFor="price">PREÇO MENSAL</label>
               <Input name="price" />
             </div>
 
-            <div>
+            <div className="inputs-labels">
               <label htmlFor="total">PREÇO TOTAL</label>
               <input
                 value={total}

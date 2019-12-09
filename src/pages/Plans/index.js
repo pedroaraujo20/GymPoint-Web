@@ -77,7 +77,11 @@ export default function Plans() {
                 <span>{plan.title}</span>
               </td>
               <td>
-                <span>{plan.duration} mês</span>
+                <span>
+                  {plan.duration > 1
+                    ? `${plan.duration} mêses`
+                    : `${plan.duration} mês`}
+                </span>
               </td>
               <td>
                 <span>{plan.priceFormatted}</span>
