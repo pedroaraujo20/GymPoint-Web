@@ -31,7 +31,7 @@ export default function Assistances() {
       <Table maxWidth="700px">
         <thead>
           <tr>
-            <th>ALUNO</th>
+            <th>PERGUNTA</th>
             <th />
           </tr>
         </thead>
@@ -39,7 +39,7 @@ export default function Assistances() {
           {assists.map(assist => (
             <tr key={assist._id}>
               <td>
-                <span>{assist.student_id}</span>
+                <span>{assist.question}</span>
               </td>
               <td>
                 <button type="button" onClick={() => setModal(true)}>

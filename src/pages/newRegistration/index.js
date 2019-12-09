@@ -1,5 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
 import { Form, Input } from '@rocketseat/unform';
@@ -23,41 +22,29 @@ const schema = Yup.object().shape({
     .required('Campo obrigatório'),
 });
 
-export default function EditPlan() {
-  const [plan, setPlan] = useState([]);
-
-  const { id } = useParams();
-
-  useEffect(() => {
-    async function loadPlan() {
-      const response = await api.get(`plans/${id}`);
-      setPlan(response.data);
-    }
-    loadPlan();
-  }, [id]);
+export default function NewRegistration() {
+  const [price, setPrice] = useState('');
+  const [duration, setDuration] = useState('');
 
   async function handleSubmit(data) {
     try {
-      await api.put(`plans/${id}`, data);
-      toast.success('Plano atualizado com sucesso!');
-      history.push('/plans');
+      await api.post('registrations', data);
+      toast.success('Matrícula realizada com sucesso!');
+      history.push('/registrations');
     } catch (err) {
       toast.error(err);
     }
   }
 
-  const total = useMemo(() => plan.price * plan.duration, [
-    plan.price,
-    plan.duration,
-  ]);
+  const total = useMemo(() => price * duration, [price, duration]);
 
   return (
     <>
       <Title maxWidth="900px">
-        <h1>Edição de plano</h1>
+        <h1>Cadastro de matrícula</h1>
         <div>
           <Button
-            onClick={() => history.push('/plans')}
+            onClick={() => history.goBack()}
             type="button"
             color="#DDDDDD"
           >
@@ -67,7 +54,7 @@ export default function EditPlan() {
 
             <span>VOLTAR</span>
           </Button>
-          <Button type="submit" form="plan-form" color="#EE4D64">
+          <Button type="submit" form="reg-form" color="#EE4D64">
             <div>
               <MdDone size={20} color="#FFF" />
             </div>
@@ -77,28 +64,36 @@ export default function EditPlan() {
         </div>
       </Title>
       <FormStyled maxWidth="900px">
-        <Form
-          initialData={plan}
-          id="plan-form"
-          onSubmit={handleSubmit}
-          schema={schema}
-        >
-          <label htmlFor="title">TÍTULO DO PLANO</label>
+        <Form id="reg-form" onSubmit={handleSubmit} schema={schema}>
+          <label htmlFor="title">ALUNO</label>
           <Input name="title" />
 
           <div>
             <div>
-              <label htmlFor="duration">DURAÇÃO (em meses)</label>
-              <Input name="duration" />
+              <label htmlFor="duration">PLANO</label>
+              <Input
+                type="number"
+                name="duration"
+                onChange={e => setDuration(e.target.value)}
+              />
             </div>
 
             <div>
-              <label htmlFor="price">PREÇO MENSAL</label>
-              <Input name="price" />
+              <label htmlFor="price">DATA DE INICIO</label>
+              <Input name="price" onChange={e => setPrice(e.target.value)} />
             </div>
 
             <div>
-              <label htmlFor="total">PREÇO TOTAL</label>
+              <label htmlFor="total">DATA DE TÉRMINO</label>
+              <input
+                value={total}
+                disabled
+                style={{ backgroundColor: '#DDDDDD' }}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="total">VALOR FINAL</label>
               <input
                 value={total}
                 disabled

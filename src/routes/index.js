@@ -11,6 +11,7 @@ import Plans from '../pages/Plans';
 import AddPlan from '../pages/addPlan';
 import EditPlan from '../pages/editPlan';
 import Registrations from '../pages/Registrations';
+import NewRegistration from '../pages/newRegistration';
 import Assistances from '../pages/Assistances';
 
 export default function Routes() {
@@ -23,7 +24,8 @@ export default function Routes() {
       <Route path="/plans" exact component={Plans} isPrivate />
       <Route path="/plans/add" component={AddPlan} isPrivate />
       <Route path="/plans/edit/:id" component={EditPlan} isPrivate />
-      <Route path="/registrations" component={Registrations} isPrivate />
+      <Route path="/registrations" exact component={Registrations} isPrivate />
+      <Route path="/registrations/new" component={NewRegistration} isPrivate />
       <Route path="/assistances" component={Assistances} isPrivate />
       <Route path="/" component={() => <h1>404 Page not Found</h1>} />
     </Switch>
