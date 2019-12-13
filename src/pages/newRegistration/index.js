@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
-import { Form, Input } from '@rocketseat/unform';
+import { Form, Input, Select } from '@rocketseat/unform';
 import * as Yup from 'yup';
 import DatePicker from './DatePicker';
 import ReactSelect from './AsyncSelector';
@@ -25,11 +25,15 @@ const schema = Yup.object().shape({
 });
 
 export default function NewRegistration() {
-  const [price, setPrice] = useState('');
-  const [duration, setDuration] = useState('');
+  const [plan, setPlan] = useState([]);
+  const [price, setPrice] = useState(0);
+
+  useEffect(() => {
+    loadPlans();
+  }, []);
 
   async function handleSubmit(data) {
-    console.tron.log(data.student_id);
+    console.log(data);
     /* try {
       await api.post('registrations', data);
       toast.success('Matrícula realizada com sucesso!');
@@ -39,18 +43,10 @@ export default function NewRegistration() {
     } */
   }
 
-  const filterColors = (data, inputValue) => {
-    return data.filter(i =>
-      i.name.toLowerCase().includes(inputValue.toLowerCase())
-    );
-  };
-
-  async function loadStudents(inputValue) {
-    const { data } = await api.get('students');
-    return filterColors(data, inputValue);
+  async function loadPlans() {
+    const response = await api.get('plans');
+    setPlan(response.data);
   }
-
-  const total = useMemo(() => price * duration, [price, duration]);
 
   return (
     <>
@@ -78,18 +74,14 @@ export default function NewRegistration() {
         </div>
       </Title>
       <FormStyled maxWidth="1000px">
-        <Form id="reg-form" onSubmit={handleSubmit}>
+        <Form id="reg-form" onSubmit={handleSubmit} context={{ price }}>
           <label htmlFor="student">ALUNO</label>
           <ReactSelect name="student_id" />
 
           <div className="inputs">
             <div className="inputs-labels">
-              <label htmlFor="duration">PLANO</label>
-              <Input
-                type="number"
-                name="duration"
-                onChange={e => setDuration(e.target.value)}
-              />
+              <label htmlFor="plans">PLANO</label>
+              <Select name="plans" options={plan} />
             </div>
 
             <div className="inputs-labels">
@@ -99,8 +91,8 @@ export default function NewRegistration() {
 
             <div className="inputs-labels">
               <label htmlFor="end_date">DATA DE TÉRMINO</label>
-              <input
-                value={total}
+              <Input
+                name="end_date"
                 type="date"
                 disabled
                 style={{ backgroundColor: '#DDDDDD' }}
@@ -108,9 +100,9 @@ export default function NewRegistration() {
             </div>
 
             <div className="inputs-labels">
-              <label htmlFor="total">VALOR FINAL</label>
+              <label htmlFor="price">VALOR FINAL</label>
               <input
-                value={total}
+                name="price"
                 disabled
                 style={{ backgroundColor: '#DDDDDD' }}
               />

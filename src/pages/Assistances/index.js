@@ -18,10 +18,6 @@ export default function Assistances() {
     loadAssists();
   }, []); // eslint-disable-line
 
-  function openModal() {}
-
-  function closeModal() {}
-
   return (
     <>
       <Title maxWidth="700px">

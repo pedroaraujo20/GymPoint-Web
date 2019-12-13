@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-import { MdAdd, MdSearch } from 'react-icons/md';
+import { MdAdd } from 'react-icons/md';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -11,6 +11,7 @@ import { Title, Button } from '~/components/Title/styles';
 
 export default function Students() {
   const [students, setStudents] = useState([]);
+  const [search, setSearch] = useState('');
 
   async function loadStudents() {
     try {
@@ -42,6 +43,21 @@ export default function Students() {
     }
   }
 
+  async function handleSearch(e) {
+    const searchName = e.target.value;
+    setSearch(searchName);
+    const response = await api.get('students');
+    if (searchName === '') {
+      setStudents(response.data);
+    } else {
+      const filtered = response.data.filter(
+        student =>
+          student.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
+      );
+      setStudents(filtered);
+    }
+  }
+
   return (
     <>
       <Title maxWidth="1200px">
@@ -58,7 +74,11 @@ export default function Students() {
 
             <span>CADASTRAR</span>
           </Button>
-          <input type="text" placeholder="Buscar aluno" />
+          <input
+            type="text"
+            placeholder="Buscar aluno"
+            onChange={handleSearch}
+          />
         </div>
       </Title>
       <Table maxWidth="1200px">

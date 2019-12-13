@@ -25,7 +25,7 @@ export const Form = styled.div`
     color: #444444;
   }
 
-  input {
+  select {
     margin-top: 8px;
     margin-bottom: 20px;
     display: block;
@@ -45,7 +45,27 @@ export const Form = styled.div`
     }
   }
 
+  input {
+    margin-top: 8px;
+    margin-bottom: 20px;
+    display: block;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    padding: 13px 15px;
+    font-size: 16px;
+    line-height: 19px;
+
+    &::placeholder {
+      font-size: 16px;
+      line-height: 19px;
+      color: #999999;
+    }
+  }
+
   div.inputs {
+    margin-top: 10px;
     display: flex;
     margin-bottom: -10px;
     justify-content: space-between;
