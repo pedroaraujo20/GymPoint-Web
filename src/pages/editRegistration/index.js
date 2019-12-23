@@ -1,24 +1,31 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { addMonths } from 'date-fns';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
 import { Form } from '@rocketseat/unform';
 import ReactDatePicker from 'react-datepicker';
 import { formatPrice } from '~/util/format';
-import ReactSelect from './AsyncSelector';
+import ReactSelect from '~/components/AsyncSelector';
 import api from '~/services/api';
 import history from '~/services/history';
 
 import { Title, Button } from '~/components/Title/styles';
 import { Form as FormStyled } from '~/components/Form/styles';
 
-export default function NewRegistration() {
+export default function EditRegistration() {
+  const [registration, setRegistration] = useState([]);
+  const [studentName, setStudentName] = useState('');
+  const [student, setStudent] = useState('');
   const [plan, setPlan] = useState([]);
   const [planId, setPlanId] = useState(0);
   const [planDuration, setPlanDuration] = useState(0);
   const [planPrice, setPlanPrice] = useState(0);
   const [initialDate, setInitialDate] = useState(new Date());
+
+  const { id } = useParams();
 
   const finalDate = useMemo(() => addMonths(initialDate, planDuration), [
     initialDate,
@@ -35,13 +42,27 @@ export default function NewRegistration() {
     setPlan(response.data);
   }
 
+  async function getRegistration() {
+    try {
+      const response = await api.get(`registrations/${id}`);
+      const { data } = response.data;
+      setRegistration(data);
+
+      setInitialDate(data.start_date);
+      setStudent(data.student_id);
+    } catch (err) {
+      toast.error(err.response.data.error);
+    }
+  }
+
   useEffect(() => {
+    getRegistration();
     loadPlans();
-  }, []);
+  }, []); //eslint-disable-line
 
   async function handleSubmit({ student_id }) {
     try {
-      await api.post('registrations', {
+      await api.put('registrations', {
         student_id,
         start_date: initialDate,
         end_date: finalDate,
@@ -53,6 +74,12 @@ export default function NewRegistration() {
     } catch (err) {
       toast.error(err.response.data.error);
     }
+  }
+
+  async function loadStudents() {
+    const response = await api.get(`students?q=${studentName}`);
+
+    return response.data;
   }
 
   const customStyles = {
@@ -67,7 +94,7 @@ export default function NewRegistration() {
   return (
     <>
       <Title maxWidth="1000px">
-        <h1>Cadastro de matrícula</h1>
+        <h1>Edição de matrícula</h1>
         <div>
           <Button
             onClick={() => history.goBack()}
@@ -92,7 +119,15 @@ export default function NewRegistration() {
       <FormStyled maxWidth="1000px">
         <Form id="reg-form" onSubmit={handleSubmit}>
           <label htmlFor="student">ALUNO</label>
-          <ReactSelect name="student_id" />
+          <AsyncSelect
+            value={student}
+            onInputChange={e => setStudentName(e)}
+            loadOptions={loadStudents}
+            getOptionValue={option => option.id}
+            getOptionLabel={option => option.name}
+            onChange={e => setStudent(e)}
+            name="student_id"
+          />
 
           <div className="inputs">
             <div className="inputs-labels">

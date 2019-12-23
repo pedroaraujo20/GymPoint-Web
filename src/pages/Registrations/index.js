@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { MdAdd } from 'react-icons/md';
@@ -32,6 +33,22 @@ export default function Registrations() {
 
     loadRegistrations();
   }, []); // eslint-disable-line
+
+  async function handleDeleteReg(id) {
+    try {
+      await api.delete(`registrations/${id}`);
+
+      const newRegList = regists.filter(reg => reg.id !== id);
+
+      toast.success('Estudante excluído com sucesso!');
+
+      setRegists(newRegList);
+    } catch (err) {
+      const { error } = err.response.data;
+      toast.error(error);
+    }
+  }
+
   return (
     <>
       <Title maxWidth="1380px">
@@ -78,8 +95,15 @@ export default function Registrations() {
                 <span>{reg.active ? 'Sim' : 'Não'}</span>
               </td>
               <td>
-                <button type="button">editar</button>
-                <button type="button">apagar</button>
+                <button
+                  type="button"
+                  onClick={() => history.push(`/registrations/edit/${reg.id}`)}
+                >
+                  editar
+                </button>
+                <button type="button" onClick={() => handleDeleteReg(reg.id)}>
+                  apagar
+                </button>
               </td>
             </tr>
           ))}
