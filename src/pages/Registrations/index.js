@@ -40,7 +40,7 @@ export default function Registrations() {
 
       const newRegList = regists.filter(reg => reg.id !== id);
 
-      toast.success('Estudante excluído com sucesso!');
+      toast.success('Matrícula excluída com sucesso!');
 
       setRegists(newRegList);
     } catch (err) {

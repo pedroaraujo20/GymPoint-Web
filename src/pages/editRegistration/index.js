@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { addMonths } from 'date-fns';
+import { addMonths, parseISO } from 'date-fns';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
@@ -18,9 +18,10 @@ import { Form as FormStyled } from '~/components/Form/styles';
 export default function EditRegistration() {
   const [registration, setRegistration] = useState([]);
   const [studentName, setStudentName] = useState('');
-  const [student, setStudent] = useState('');
-  const [plan, setPlan] = useState([]);
+  const [student, setStudent] = useState(null);
   const [planId, setPlanId] = useState(0);
+  const [planSelected, setPlanSelected] = useState([]);
+  const [plan, setPlan] = useState([]);
   const [planDuration, setPlanDuration] = useState(0);
   const [planPrice, setPlanPrice] = useState(0);
   const [initialDate, setInitialDate] = useState(new Date());
@@ -45,13 +46,18 @@ export default function EditRegistration() {
   async function getRegistration() {
     try {
       const response = await api.get(`registrations/${id}`);
-      const { data } = response.data;
-      setRegistration(data);
+      console.log(response.data);
+      setRegistration(response.data);
 
-      setInitialDate(data.start_date);
-      setStudent(data.student_id);
+      setStudent(response.data.student);
+      setInitialDate(parseISO(response.data.start_date));
+
+      setPlanId(response.data.plan_id);
+      setPlanSelected(response.data.plan);
+      setPlanDuration(response.data.plan.duration);
+      setPlanPrice(response.data.plan.price);
     } catch (err) {
-      toast.error(err.response.data.error);
+      toast.error(err.getPlan.data.error);
     }
   }
 
@@ -60,26 +66,20 @@ export default function EditRegistration() {
     loadPlans();
   }, []); //eslint-disable-line
 
-  async function handleSubmit({ student_id }) {
+  async function handleSubmit() {
     try {
-      await api.put('registrations', {
-        student_id,
+      await api.put(`registrations/${id}`, {
+        student_id: student.id,
         start_date: initialDate,
         end_date: finalDate,
         plan_id: planId,
         price: totalPrice,
       });
-      toast.success('Matrícula realizada com sucesso!');
+      toast.success('Matrícula atualizada com sucesso!');
       history.push('/registrations');
     } catch (err) {
       toast.error(err.response.data.error);
     }
-  }
-
-  async function loadStudents() {
-    const response = await api.get(`students?q=${studentName}`);
-
-    return response.data;
   }
 
   const customStyles = {
@@ -90,6 +90,12 @@ export default function EditRegistration() {
       marginRight: 10,
     }),
   };
+
+  async function loadStudents() {
+    const response = await api.get(`students?q=${studentName}`);
+
+    return response.data;
+  }
 
   return (
     <>
@@ -121,11 +127,11 @@ export default function EditRegistration() {
           <label htmlFor="student">ALUNO</label>
           <AsyncSelect
             value={student}
-            onInputChange={e => setStudentName(e)}
+            onInputChange={v => setStudentName(v)}
             loadOptions={loadStudents}
             getOptionValue={option => option.id}
             getOptionLabel={option => option.name}
-            onChange={e => setStudent(e)}
+            onChange={s => setStudent(s)}
             name="student_id"
           />
 
@@ -134,6 +140,7 @@ export default function EditRegistration() {
               <label htmlFor="plans">PLANO</label>
               <Select
                 name="plans"
+                value={planSelected}
                 styles={customStyles}
                 options={plan}
                 placeholder="Plano"
