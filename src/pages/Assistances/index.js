@@ -1,22 +1,35 @@
 import React, { useState, useEffect } from 'react';
+import { Form, Input } from '@rocketseat/unform';
 import api from '~/services/api';
 import { Table } from '~/components/Table/styles';
 import { Title } from '~/components/Title/styles';
+
 import Modal from '~/components/Modal';
 
 export default function Assistances() {
   const [assists, setAssists] = useState([]);
+  const [assistId, setAssistId] = useState('');
   const [modal, setModal] = useState(false);
 
+  async function loadAssists() {
+    const response = await api.get('assists');
+
+    setAssists(response.data);
+  }
+
   useEffect(() => {
-    async function loadAssists() {
-      const response = await api.get('/assists');
-
-      setAssists(response.data);
-    }
-
     loadAssists();
   }, []); // eslint-disable-line
+
+  function handleAssistChange(id) {
+    const updatedAssists = assists.filter(assist => assist._id !== id);
+    setAssists(updatedAssists);
+  }
+
+  function selectAssist(id) {
+    setAssistId(id);
+    setModal(true);
+  }
 
   return (
     <>
@@ -38,7 +51,7 @@ export default function Assistances() {
                 <span>{assist.question}</span>
               </td>
               <td>
-                <button type="button" onClick={() => setModal(true)}>
+                <button type="button" onClick={() => selectAssist(assist._id)}>
                   responder
                 </button>
               </td>
@@ -46,21 +59,12 @@ export default function Assistances() {
           ))}
         </tbody>
       </Table>
-      {modal && (
-        <Modal>
-          <span>PERGUNTA DO ALUNO</span>
-          <p>
-            Olá pessoal da academia, gostaria de saber se quando acordar devo
-            ingerir batata doce e frango logo de primeira, preparar as marmitas
-            e lotar a geladeira? Dou um pico de insulina e jogo o hipercalórico?
-          </p>
-          <span>SUA RESPOSTA</span>
-          <textarea />
-          <button onClick={() => setModal(false)} type="button">
-            Responder aluno
-          </button>
-        </Modal>
-      )}
+      <Modal
+        isVisible={modal}
+        helpId={assistId}
+        hide={() => setModal(false)}
+        handleChange={handleAssistChange}
+      />
     </>
   );
 }

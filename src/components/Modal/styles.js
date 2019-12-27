@@ -7,7 +7,7 @@ export const Container = styled.div`
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: flex;
+  display: ${props => (props.visible ? 'flex' : 'none')};
   justify-content: center;
   align-items: center;
 `;
@@ -19,11 +19,16 @@ export const Content = styled.div`
   padding: 30px;
   width: 450px;
 
-  span {
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 16px;
-    color: #444444;
+  div {
+    display: flex;
+    justify-content: space-between;
+
+    span {
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 16px;
+      color: #444444;
+    }
   }
 
   p {
@@ -34,32 +39,48 @@ export const Content = styled.div`
     color: #666666;
   }
 
-  textarea {
-    margin-top: 8px;
-    margin-bottom: 21px;
-    background: #ffffff;
-    border: 1px solid #dddddd;
-    height: 127px;
-    width: 390px;
-    border-radius: 4px;
-    padding: 15px 13px;
-    font-size: 16px;
-    line-height: 19px;
-    color: #999999;
-  }
-
-  button {
+  form {
     display: flex;
-    border: 0;
-    height: 45px;
-    width: 390px;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    background: #ee4d64;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 19px;
-    color: #ffffff;
+
+    span {
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 16px;
+      color: #444444;
+    }
+
+    textarea {
+      margin-top: 8px;
+      margin-bottom: 21px;
+      background: #ffffff;
+      font-size: 16px;
+      line-height: 19px;
+      padding: 10px;
+      border-radius: 4px;
+      height: 150px;
+
+      &::placeholder {
+        font-size: 16px;
+        line-height: 19px;
+        color: #999999;
+      }
+    }
+
+    button {
+      display: flex;
+      border: 0;
+      height: 45px;
+      width: 390px;
+      justify-content: center;
+      align-items: center;
+      background: #ee4d64;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 19px;
+      color: #ffffff;
+    }
   }
 `;
